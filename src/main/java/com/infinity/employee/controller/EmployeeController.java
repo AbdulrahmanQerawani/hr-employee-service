@@ -28,7 +28,16 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{employeeId}")
-    public ResponseEntity<String> deleteEmployee(@RequestParam Long employeeId){
+    public ResponseEntity<String> deleteEmployee(@RequestParam Long employeeId) {
         return ResponseEntity.ok(service.deleteEmployee(employeeId));
+    }
+
+    @PostMapping
+    public ResponseEntity<Employee> addEmployee(@RequestBody Employee request) {
+        return ResponseEntity.ok(service.addEmployee(request));
+    }
+    @PutMapping
+    public ResponseEntity<Employee> updateEmployee(@RequestBody Employee request) {
+        return ResponseEntity.ok(service.updateEmployee(request));
     }
 }

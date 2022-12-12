@@ -2,12 +2,12 @@ package com.infinity.employee.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.infinity.employee.utils.Gender;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.hateoas.RepresentationModel;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Getter @Setter @ToString

@@ -12,8 +12,7 @@ import java.util.List;
 
 @Service
 public class EmployeeService {
-    private EmployeeRepository repository;
-    @Autowired
+    private final EmployeeRepository repository;
     MessageSource messages;
 
     private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
@@ -47,10 +46,17 @@ public class EmployeeService {
         }
         logger.debug("Employee with id: %s and his name is \"%s\" has been Deleted", employee.getLastName(),employeeId);
         repository.delete(employee);
-        return String.format(messages.getMessage("employee.delete.success.message",
-                null, null), employeeId);
+        return String.format(messages.getMessage("employee.delete.success.message", null, null), employeeId);
 
 
+    }
+    public Employee addEmployee(Employee employee) {
+        repository.save(employee);
+        return employee;
+    }
+    public Employee updateEmployee(Employee employee) {
+        repository.save(employee);
+        return employee;
     }
 
 }
