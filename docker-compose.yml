@@ -37,8 +37,8 @@ services:
     image: infinity/eurekaserver:1.0.0
     ports:
       - "8070:8070"
-    environment:
-      - "SPRING_PROFILES_ACTIVE=dev"
+#    environment:
+#      - "SPRING_PROFILES_ACTIVE=dev"
     networks:
       backend:
         aliases:
