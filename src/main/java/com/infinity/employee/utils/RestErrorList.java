@@ -1,4 +1,4 @@
-package com.infinity.employee.model.utils;
+package com.infinity.employee.utils;
 
 import org.springframework.http.HttpStatus;
 

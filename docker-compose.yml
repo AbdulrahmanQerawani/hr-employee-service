@@ -1,0 +1,60 @@
+version: '3.7'
+services:
+  database:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB:       "infinityhr_dev"
+#    volumes:
+#      - ./init.sql:/docker-entrypoint-initdb.d/1-init.sql
+#      - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    networks:
+      backend:
+        aliases:
+          - "database"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  configserver:
+    image: infinity/config-server:1.0.0
+    ports:
+      - "8071:8071"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=git"
+    networks:
+      backend:
+        aliases:
+          - "configserver"
+
+  eurekaserver:
+    image: infinity/eurekaserver:1.0.0
+    ports:
+      - "8070:8070"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
+    networks:
+      backend:
+        aliases:
+          - "eurekaserver"
+
+  employeeservice:
+    image: infinity/employee-service:1.0.0
+    ports:
+      - "8080:8080"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
+    networks:
+      backend:
+        aliases:
+          - "employeeservice"
+
+networks:
+  backend:
+    driver: bridge

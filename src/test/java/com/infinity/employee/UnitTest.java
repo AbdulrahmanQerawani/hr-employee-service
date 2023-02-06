@@ -6,7 +6,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@DisplayName("Testing infinity.Unit")
+@DisplayName("With Given Unit")
 public class UnitTest {
     Unit unit;
     @BeforeEach
@@ -17,7 +17,7 @@ public class UnitTest {
     @Nested
     @DisplayName("when Add New Unit")
     class addNewUnit{
-        @DisplayName("add with Constructor")
+        @DisplayName("Then create new Unit with Constructor")
         @Test
         @Order(1)
         void withConstructor(){
@@ -25,7 +25,7 @@ public class UnitTest {
             assertNotNull(unit);
         }
 
-        @DisplayName("add Without Constructor")
+        @DisplayName("Then create new Unit without value")
         @Test
         @Order(2)
         void withoutConstructor(){
