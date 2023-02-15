@@ -1,0 +1,111 @@
+eureka:
+    client:
+        enabled: false
+example:
+    property: test
+management:
+  endpoints:
+        enabled-by-default: true
+        web:
+            exposure:
+                exclude: env,beans
+                include: '*'
+
+  tracing:
+    sampling:
+      probability: 1.0
+    enabled: true
+
+
+
+server:
+    port: 8080
+spring:
+    application:
+        name: employee-service
+    profiles:
+      active: test
+    cloud:
+        config:
+            discovery:
+                enabled: false
+            import-check:
+                enabled: false
+    database:
+        driverClassName: org.postgresql.Driver
+    datasource:
+        password: postgres
+        testWhileIdle: true
+        url: jdbc:postgresql://localhost:5432/infinityhr_dev?sslmode=disable
+        username: postgres
+        validationQuery: SELECT 1
+    devtools:
+        add-properties: false
+    jpa:
+        database: POSTGRESQL
+        hibernate:
+            ddl-auto: update
+            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        properties:
+            hibernate:
+                default_schema: 'hr '
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+        show-sql: true
+    sql:
+        init:
+            mode: always
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.infinity: DEBUG
+#  io.github.resilience4j.common.circuitbreaker.configuration.CommonCircuitBreakerConfigurationProperties
+resilience4j.circuitbreaker:
+  instances:
+    employeeservice:
+      registerHealthIndicator: true
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      waitDurationInOpenState: 10s
+      failureRateThreshold: 50
+      recordExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+        - java.util.concurrent.TimeoutException
+        - org.springframework.web.client.ResourceAccessException
+    organizationService:
+      registerHealthIndicator: true
+      minimumNumberOfCalls: 6
+      permittedNumberOfCallsInHalfOpenState: 4
+      waitDurationInOpenState: 20s
+      failureRateThreshold: 60
+
+# rate-limiter config
+resilience4j.ratelimiter:
+  instances:
+      employeeservice:
+        limitForPeriod: 5
+        limitRefreshPeriod: 5000
+        timeoutDuration: 1000ms
+#
+resilience4j.retry:
+  instances:
+    retryEmployeeservice:
+      maxAttempts: 5
+      waitDuration: 10000
+      retry-exceptions:
+        - java.util.concurrent.TimeoutException
+
+resilience4j.bulkhead:
+  instances:
+    bulkheadEmployeeservice:
+      maxWaitDuration: 2ms
+      maxConcurrentCalls: 20
+
+
+resilience4j.thread-pool-bulkhead:
+  instances:
+    bulkheadEmployeeservice:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1

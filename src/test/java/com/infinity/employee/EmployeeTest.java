@@ -63,9 +63,7 @@ public class EmployeeTest {
     @Test
     @DisplayName("Within Getter Methods")
     void employeeGetterTest() {
-        Employee employee = new Employee(1L,"Jone",
-                "maxthon", Gender.MALE,
-                "test@g.com");
+        Employee employee = new Employee(1L,1L,"Jone", "maxthon", Gender.MALE, "test@g.com","developer");
         assertEquals("Employee(employeeId=1, firstName=Jone, lastName=maxthon, gender=MALE, emailAddress=test@g.com, unitName=null, unitDescription=null, version=null)", employee.toString());
     }
 }

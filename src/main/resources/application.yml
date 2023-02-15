@@ -6,15 +6,16 @@ spring:
   config:
     import: optional:configserver:http://configserver:8071
 
-#  cloud:
-#    config:
-#      uri: http://configserver:8071
-
 logging:
   level:
     com.netflix: WARN
     org.springframework.web: WARN
     com.infinity: DEBUG
+
+
+
+
+
 
 #auditevents  , Exposes audit events information for the current application.
 #beans  , Displays a complete list of all the Spring beans in your application.
@@ -37,60 +38,54 @@ logging:
 #threaddump , Performs a thread dump.
 
 #management.endpoints.web.base-path=/
-management:
-  endpoints:
-    enabled-by-default: false
-    health:
-      enabled: true
-      show-details: always
+
+#  io.github.resilience4j.common.circuitbreaker.configuration.CommonCircuitBreakerConfigurationProperties
+resilience4j.circuitbreaker:
+  instances:
+    employeeservice:
+      registerHealthIndicator: true
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      waitDurationInOpenState: 10s
+      failureRateThreshold: 50
+      recordExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+        - java.util.concurrent.TimeoutException
+        - org.springframework.web.client.ResourceAccessException
+    organizationService:
+      registerHealthIndicator: true
+      minimumNumberOfCalls: 6
+      permittedNumberOfCallsInHalfOpenState: 4
+      waitDurationInOpenState: 20s
+      failureRateThreshold: 60
+
+# rate-limiter config
+resilience4j.ratelimiter:
+  instances:
+    employeeservice:
+      limitForPeriod: 5
+      limitRefreshPeriod: 5000
+      timeoutDuration: 1000ms
+#
+resilience4j.retry:
+  instances:
+    retryEmployeeservice:
+      maxAttempts: 5
+      waitDuration: 10000
+      retry-exceptions:
+        - java.util.concurrent.TimeoutException
+
+resilience4j.bulkhead:
+  instances:
+    bulkheadEmployeeservice:
+      maxWaitDuration: 2ms
+      maxConcurrentCalls: 20
 
 
-#
-#resilience4j.circuitbreaker:
-#  instances:
-#    licenseService:
-#      registerHealthIndicator: true
-#      ringBufferSizeInClosedState: 5
-#      ringBufferSizeInHalfOpenState: 3
-#      waitDurationInOpenState: 10s
-#      failureRateThreshold: 50
-#      recordExceptions:
-#        - org.springframework.web.client.HttpServerErrorException
-#        - java.io.IOException
-#        - java.util.concurrent.TimeoutException
-#        - org.springframework.web.client.ResourceAccessException
-#    organizationService:
-#      registerHealthIndicator: true
-#      ringBufferSizeInClosedState: 6
-#      ringBufferSizeInHalfOpenState: 4
-#      waitDurationInOpenState: 20s
-#      failureRateThreshold: 60
-#
-#resilience4j.ratelimiter:
-#  instances:
-#    licenseService:
-#      limitForPeriod: 5
-#      limitRefreshPeriod: 5000
-#      timeoutDuration: 1000ms
-#
-#resilience4j.retry:
-#  instances:
-#    retryLicenseService:
-#      maxRetryAttempts: 5
-#      waitDuration: 10000
-#      retry-exceptions:
-#        - java.util.concurrent.TimeoutException
-#
-#resilience4j.bulkhead:
-#  instances:
-#    bulkheadLicenseService:
-#      maxWaitDuration: 2ms
-#      maxConcurrentCalls: 20
-#
-#
-#resilience4j.thread-pool-bulkhead:
-#  instances:
-#    bulkheadLicenseService:
-#      maxThreadPoolSize: 1
-#      coreThreadPoolSize: 1
-#      queueCapacity: 1
+resilience4j.thread-pool-bulkhead:
+  instances:
+    bulkheadEmployeeservice:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1

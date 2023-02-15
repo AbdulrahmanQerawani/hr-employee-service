@@ -1,11 +1,10 @@
 package com.infinity.employee.service;
 
 import com.infinity.employee.model.Employee;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 
 
 public interface EmployeeService {
@@ -23,7 +22,25 @@ public interface EmployeeService {
      *
      * @return All employees in the database.
      */
-    List<Employee> getAllEmployee();
+    List<Employee> getAllEmployees() throws TimeoutException;
+
+    /**
+     * Returns all employees with specified department ID.
+     *
+     * @param departmentId The ID of the department
+     *
+     * @return All employees with related department ID.
+     */
+    List<Employee> getAllEmployeesByDepartmentId(Long departmentId);
+
+    /**
+     * Returns all employees with specified organization ID.
+     *
+     * @param organizationId The ID of the organization
+     *
+     * @return All employees with related organization ID.
+     */
+    List<Employee> getAllEmployeesByOrganizationId(Long organizationId);
 
     /**
      * Saves the specified employee to the database.

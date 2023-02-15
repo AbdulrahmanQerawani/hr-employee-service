@@ -6,7 +6,6 @@ import com.infinity.employee.service.EmployeeService;
 import com.infinity.employee.utils.Gender;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -49,7 +49,7 @@ public class EmployeeServiceTest {
 
             @BeforeEach
             void setup() {
-                mockEmployee = new Employee(1L, "john", "Conner", Gender.MALE, "test@gmail.com");
+                mockEmployee = new Employee(1L,1L, "john", "Conner", Gender.MALE, "test@gmail.com","developer");
             }
 
             @Test
@@ -75,7 +75,7 @@ public class EmployeeServiceTest {
 
             @BeforeEach
             void setup() {
-                mockEmployee = new Employee(1L, "john", "Conner", Gender.MALE, "test@gmail.com");
+                mockEmployee = new Employee(1L,1L, "john", "Conner", Gender.MALE, "test@gmail.com","developer");
             }
 
             @Test
@@ -100,20 +100,20 @@ public class EmployeeServiceTest {
 
             @BeforeEach
             void setup() {
-                Employee employee1 = new Employee(1L, "john", "Conner", Gender.MALE, "john@gmail.com");
-                Employee employee2 = new Employee(2L, "jack", "jack", Gender.FEMALE, "jack@gmail.com");
+                Employee employee1 = new Employee(1L,1L, "john", "Conner", Gender.MALE, "john@gmail.com","developer");
+                Employee employee2 = new Employee(2L,1L, "jack", "jack", Gender.FEMALE, "jack@gmail.com","developer");
                 mockEmployeeList.add(employee1);
                 mockEmployeeList.add(employee2);
             }
 
             @Test
             @DisplayName("Then return a list of employees")
-            void getEmployeeListSuccessTest() {
+            void getEmployeeListSuccessTest() throws TimeoutException {
                 // Setup our mock
                 doReturn(mockEmployeeList).when(employeeRepository).findAll();
 
                 // execute the service call
-                List<Employee> employeeList = employeeService.getAllEmployee();
+                List<Employee> employeeList = employeeService.getAllEmployees();
 
                 // assert the response
                 assertFalse(employeeList.isEmpty(), "Employee list was empty, when shouldn't");
@@ -135,12 +135,12 @@ public class EmployeeServiceTest {
 
             @Test
             @DisplayName("Then return empty")
-            void getEmployeeListNotFoundTest() {
+            void getEmployeeListNotFoundTest() throws TimeoutException {
                 // Setup our mock
                 doReturn(mockEmployeeList).when(employeeRepository).findAll();
 
                 // execute the service call
-                List<Employee> employeeList = employeeService.getAllEmployee();
+                List<Employee> employeeList = employeeService.getAllEmployees();
 
                 // assert the response
                 assertTrue(employeeList.isEmpty(), "Employee list should be empty");
@@ -162,7 +162,7 @@ public class EmployeeServiceTest {
 
             @BeforeEach
             void setup() {
-                mockEmployee = new Employee(1L, "john", "Conner", Gender.MALE, "test@gmail.com");
+                mockEmployee = new Employee(1L, 1L, "john", "Conner", Gender.MALE, "test@gmail.com","developer");
             }
 
             @Test

@@ -30,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-//@TestPropertySource(locations = "classpath:test.properties")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class EmployeeControllerTest {
 
@@ -54,7 +53,7 @@ public class EmployeeControllerTest {
     @DisplayName("GET /employee/1 - Found")
     void getEmployeeByIdTest() throws Exception {
         // Set up our mocked employeeService
-        Employee mockEmployee = new Employee(1L, "john", "Conner", Gender.MALE, "test@gmail.com");
+        Employee mockEmployee = new Employee(1L,1L, "john", "Conner", Gender.MALE, "test@gmail.com","developer");
         mockEmployee.setVersion(1);
         doReturn(Optional.of(mockEmployee)).when(employeeService).getEmployee(1L);
 
@@ -73,6 +72,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.lastName", is("Conner")))
                 .andExpect(jsonPath("$.gender", is(Gender.MALE.toString())))
                 .andExpect(jsonPath("$.version", is(1)));
+
     }
 
     @Test
@@ -96,7 +96,7 @@ public class EmployeeControllerTest {
     void postProductSuccessTest() throws Exception {
         // Set up our mocked employeeService
         Employee postEmployee = new Employee("john", "Conner", Gender.MALE, "test@gmail.com");
-        Employee mockEmployee = new Employee(1L, "john", "Conner", Gender.MALE, "test@gmail.com");
+        Employee mockEmployee = new Employee(1L,1L, "john", "Conner", Gender.MALE, "test@gmail.com","developer");
         mockEmployee.setVersion(1);
         doReturn(mockEmployee).when(employeeService).addEmployee(any());
 
@@ -127,7 +127,7 @@ public class EmployeeControllerTest {
     void employeePutSuccessTest() throws Exception {
         // Set up our mocked employeeService
         Employee putEmployee = new Employee("john", "Conner", Gender.MALE, "test@gmail.com");
-        Employee mockEmployee = new Employee(1L, "john", "Conner", Gender.MALE, "test@gmail.com");
+        Employee mockEmployee = new Employee(1L,1L, "john", "Conner", Gender.MALE, "test@gmail.com","developer");
         mockEmployee.setVersion(1);
         doReturn(Optional.of(mockEmployee)).when(employeeService).getEmployee(1L);
         doReturn(Boolean.TRUE).when(employeeService).updateEmployee(any());
@@ -161,7 +161,7 @@ public class EmployeeControllerTest {
     void employeePutVersionMismatchTest() throws Exception {
         // Set up our mocked employeeService
         Employee putEmployee = new Employee("john", "Conner", Gender.MALE, "test@gmail.com");
-        Employee mockEmployee = new Employee(1L, "john", "Conner", Gender.MALE, "test@gmail.com");
+        Employee mockEmployee = new Employee(1L,1L, "john", "Conner", Gender.MALE, "test@gmail.com","developer");
         mockEmployee.setVersion(2);
         doReturn(Optional.of(mockEmployee)).when(employeeService).getEmployee(1L);
         doReturn(Boolean.TRUE).when(employeeService).updateEmployee(any());
@@ -200,7 +200,7 @@ public class EmployeeControllerTest {
     @DisplayName("DELETE /employee/{employeeId} - Success")
     void employeeDeleteSuccessTest() throws Exception {
         // Set up our mocked employeeService
-        Employee mockEmployee = new Employee(1L, "john", "Conner", Gender.MALE, "test@gmail.com");
+        Employee mockEmployee = new Employee(1L,1L, "john", "Conner", Gender.MALE, "test@gmail.com","developer");
         mockEmployee.setVersion(1);
         doReturn(Optional.of(mockEmployee)).when(employeeService).getEmployee(1L);
         doReturn(Boolean.TRUE).when(employeeService).deleteEmployee(any());
@@ -229,7 +229,7 @@ public class EmployeeControllerTest {
     @DisplayName("DELETE /employee/{employeeId} - Failure")
     void employeeDeleteFailureTest() throws Exception {
         // Set up our mocked employeeService
-        Employee mockEmployee = new Employee(1L, "john", "Conner", Gender.MALE, "test@gmail.com");
+        Employee mockEmployee = new Employee(1L,1L, "john", "Conner", Gender.MALE, "test@gmail.com","developer");
         mockEmployee.setVersion(1);
         doReturn(Optional.of(mockEmployee)).when(employeeService).getEmployee(1L);
         doReturn(Boolean.FALSE).when(employeeService).deleteEmployee(1L);

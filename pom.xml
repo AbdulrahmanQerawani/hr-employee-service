@@ -15,13 +15,59 @@
     <description>employee service</description>
     <properties>
         <java.version>17</java.version>
-        <spring-cloud.version>2022.0.0</spring-cloud.version>
+        <spring-cloud.version>2022.0.1</spring-cloud.version>
         <docker.image.prefix>infinity</docker.image.prefix>
+        <loki4j.version>1.4.0-rc1</loki4j.version>
+        <micrometer.docs.version>1.0.1</micrometer.docs.version>
     </properties>
     <dependencies>
+        <!--Provides metric endpoints and generate all metrics/tracing autoconfiguration-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--is needed for the `Observed` annotation // 1-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!--Tracing dependencies // 2-->
+        <!--which is needed to bridge the Micrometer Observation API to OpenTelemetry-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+        <!--which is needed to report traces to collector zipkin-->
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-zipkin</artifactId>
+        </dependency>
+        <!--        -->
+        <!--Without this dependency actuator does not provide a /actuator/prometheus endpoint-->
+<!--        <dependency>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <artifactId>micrometer-registry-prometheus</artifactId>-->
+<!--        </dependency>-->
+        <!--Logback Appender for Grafana Loki // 3-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.github.loki4j</groupId>-->
+        <!--            <artifactId>loki-logback-appender</artifactId>-->
+        <!--            <version>${loki4j.version}</version>-->
+        <!--        </dependency>-->
+        <!--Documentation generation for ObservationDocumentation classes // 4-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-docs-generator</artifactId>
+            <version>${micrometer.docs.version}</version>
+        </dependency>
+        <!--Dependency for testing observations // 5-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-observation-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -68,18 +114,6 @@
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-api</artifactId>
-            <version>1.19.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-sdk</artifactId>
-            <version>1.19.0</version>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -159,31 +193,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- This plugin is used to create a Docker image and publish
-            it to Docker hub-->
-<!--            <plugin>-->
-<!--                <groupId>com.spotify</groupId>-->
-<!--                <artifactId>dockerfile-maven-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <repository>${docker.image.prefix}/${project.artifactId}-->
-<!--                    </repository>-->
-<!--                    <tag>${project.version}</tag>-->
-<!--                    <buildArgs>-->
-<!--                        <JAR_FILE>target/${project.build.finalName}.jar-->
-<!--                        </JAR_FILE>-->
-<!--                    </buildArgs>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>default</id>-->
-<!--                        <phase>install</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>build</goal>-->
-<!--                            <goal>push</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
         </plugins>
     </build>
 </project>

@@ -21,20 +21,32 @@ public class Employee extends RepresentationModel<Employee>{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id", nullable = false)
     private Long employeeId;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
+
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
     @Column(name = "gender")
     private Gender gender;
+
+    @Column(name = "age")
+    private int age;
+
     @Column(name = "email_address")
-//    @NotBlank(message = "employee.add.error.email.message")
     @Email(message = "employee.add.error.email.message", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
     private String emailAddress;
-    @Transient
-    private String unitName;
-    @Transient
-    private String unitDescription;
+
+    @Column(name = "organization_id")
+    private Long organizationId;
+
+    @Column(name = "department_id")
+    private Long departmentId;
+
+    @Column(name = "position")
+    private String position;
+
     @Version
     private Integer version;
 
@@ -47,11 +59,21 @@ public class Employee extends RepresentationModel<Employee>{
         this.emailAddress = emailAddress;
     }
 
-    public Employee(Long employeeId, String firstName, String lastName, Gender gender, String emailAddress) {
-        this.employeeId = employeeId;
+    public Employee(Long departmentId, String firstName, String lastName, Gender gender, String emailAddress, String position) {
+        this.departmentId = departmentId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.emailAddress = emailAddress;
+        this.position = position;
+    }
+    public Employee(Long employeeId,Long departmentId, String firstName, String lastName, Gender gender, String emailAddress, String position) {
+        this.employeeId = employeeId;
+        this.departmentId = departmentId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.emailAddress = emailAddress;
+        this.position = position;
     }
 }

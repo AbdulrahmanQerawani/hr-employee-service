@@ -2,6 +2,12 @@ package com.infinity.employee.controller;
 
 import com.infinity.employee.model.Employee;
 import com.infinity.employee.service.EmployeeService;
+import com.infinity.employee.utils.Gender;
+import com.infinity.employee.utils.UserContextHolder;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -13,22 +19,96 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.TimeoutException;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 //@RequestMapping("/api/v1/employee")
-@RequestMapping("/employee")
+//@RequestMapping("/employee")
 @Slf4j
 public class EmployeeController {
 
     // get LOGGER from SLF4J annotation
     private static final Logger LOGGER = log;
-    final EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
+    }
+
+    /**
+     * Returns all employees in the database.
+     *
+     * @return Returns all employees in the database.
+     */
+    @GetMapping(value = "/")
+    public ResponseEntity<List<Employee>> getAllEmployees() throws TimeoutException {
+        LOGGER.debug("EmployeeServiceController Correlation id: {}",
+                UserContextHolder.getContext().getCorrelationId());
+        List<Employee> employeeList = employeeService.getAllEmployees();
+        employeeList.forEach(employee -> {
+            employee.add(linkTo(methodOn(EmployeeController.class)
+                    .deleteEmployee(employee.getEmployeeId()))
+                    .withRel("deleteEmployee")
+                    .withSelfRel());
+        });
+        return ResponseEntity.ok(employeeList);
+
+    }
+    /**
+     * Returns all employees with specified department.
+     *
+     * @param departmentId The ID of the department.
+     *
+     * @return Returns all employees with related department ID.
+     */
+    @GetMapping(value = "/department/{departmentId}")
+    public ResponseEntity<List<Employee>> getAllEmployeesByDepartment(@PathVariable("departmentId") Long departmentId) {
+        LOGGER.info("get all employees in the department with id:{}",departmentId);
+        List<Employee> employeeList = employeeService.getAllEmployeesByDepartmentId(departmentId);
+        employeeList.forEach(employee -> {
+            employee.add(linkTo(methodOn(EmployeeController.class)
+                    .deleteEmployee(employee.getEmployeeId()))
+                    .withRel("deleteEmployee")
+                    .withSelfRel());
+        });
+        return ResponseEntity.ok(employeeList);
+    }
+
+    /**
+     * Returns all employees with specified organization.
+     *
+     * @param organizationId The ID of the organization.
+     *
+     * @return {@return ResponseEntity} with all employees with related organization ID.
+     */
+    @GetMapping(value = "/organization/{organizationId}")
+    public ResponseEntity<List<Employee>> getAllEmployeesByOrganization(@PathVariable("organizationId") Long organizationId) {
+        LOGGER.info("get all employees with specified organization id:{}",organizationId);
+        List<Employee> employeeList = employeeService.getAllEmployeesByOrganizationId(organizationId);
+        employeeList.forEach(employee -> {
+            employee.add(linkTo(methodOn(EmployeeController.class)
+                    .deleteEmployee(employee.getEmployeeId()))
+                    .withRel("deleteEmployee")
+                    .withSelfRel());
+        });
+        return ResponseEntity.ok(employeeList);
+    }
+
+    /**
+     * Returns all employees with specified organization.
+     *
+     * @param organizationId The ID of the organization.
+     *
+     * @return {@return   ArrayList}  with all employees with related organization ID.
+     */
+    @GetMapping(value = "/api/v2/organization/{organizationId}")
+    public List<Employee> findByOrganization(@PathVariable("organizationId") Long organizationId){
+        LOGGER.info("get all employees with specified organization id:{} request->[/api/v2/organization/{}]",organizationId,organizationId);
+        return employeeService.getAllEmployeesByOrganizationId(organizationId);
     }
 
     /**
@@ -38,8 +118,8 @@ public class EmployeeController {
      * @return The Employee with the specified ID IF Exists.
      */
     @GetMapping("/{employeeId}")
-    public ResponseEntity<?> employee(@PathVariable Long employeeId) {
-
+    public ResponseEntity<?> getEmployee(@PathVariable Long employeeId) {
+        LOGGER.info("get Employee by id={}", employeeId);
         return employeeService.getEmployee(employeeId)
                 .map(emp -> {
                     try {
@@ -54,23 +134,6 @@ public class EmployeeController {
                         return ResponseEntity.internalServerError().build();
                     }
                 }).orElse(ResponseEntity.notFound().build());
-    }
-
-    /**
-     * Returns all employees in the database.
-     *
-     * @return Returns all employees in the database.
-     */
-    @GetMapping(value = "/")
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-        List<Employee> employeeList = employeeService.getAllEmployee();
-        employeeList.forEach(employee -> {
-            employee.add(linkTo(methodOn(EmployeeController.class)
-                    .deleteEmployee(employee.getEmployeeId()))
-                    .withRel("deleteEmployee")
-                    .withSelfRel());
-        });
-        return ResponseEntity.ok(employeeList);
     }
 
     /**
