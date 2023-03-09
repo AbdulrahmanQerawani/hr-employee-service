@@ -4,12 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.infinity.employee.utils.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
-
-
-import java.util.Date;
 
 @Getter @Setter @ToString @NoArgsConstructor @EqualsAndHashCode
 @Entity
@@ -35,14 +31,20 @@ public class Employee extends RepresentationModel<Employee>{
     private int age;
 
     @Column(name = "email_address")
-    @Email(message = "employee.add.error.email.message", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
+    @Email
     private String emailAddress;
 
     @Column(name = "organization_id")
     private Long organizationId;
 
+    @Transient
+    private String organizationName;
+
     @Column(name = "department_id")
     private Long departmentId;
+
+    @Transient
+    private String departmentName;
 
     @Column(name = "position")
     private String position;

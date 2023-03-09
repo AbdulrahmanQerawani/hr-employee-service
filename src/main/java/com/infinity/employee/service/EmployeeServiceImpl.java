@@ -8,6 +8,7 @@ import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,17 +23,12 @@ import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class EmployeeServiceImpl implements EmployeeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final EmployeeRepository employeeRepository;
     private final MessageSource messages;
-
-    @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, MessageSource messages) {
-        this.employeeRepository = employeeRepository;
-        this.messages = messages;
-    }
 
     @Override
     public Optional<Employee> getEmployee(Long employeeId) {
@@ -118,12 +114,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private void randomlyRunLong(){
         Random rand = new Random();
-        int randomNum = rand.nextInt(3) + 1;
-        if (randomNum==1) {sleep();}
+        int randomNum = rand.nextInt(20) + 1;
+//        if (randomNum==7) sleep();
     }
     private void sleep(){
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
             throw new java.util.concurrent.TimeoutException();
         } catch (InterruptedException e) {
             LOGGER.error(e.getMessage());

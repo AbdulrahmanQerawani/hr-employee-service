@@ -42,19 +42,44 @@
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-zipkin</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.3</version>
+        </dependency>
         <!--        -->
         <!--Without this dependency actuator does not provide a /actuator/prometheus endpoint-->
-<!--        <dependency>-->
-<!--            <groupId>io.micrometer</groupId>-->
-<!--            <artifactId>micrometer-registry-prometheus</artifactId>-->
-<!--        </dependency>-->
-        <!--Logback Appender for Grafana Loki // 3-->
         <!--        <dependency>-->
-        <!--            <groupId>com.github.loki4j</groupId>-->
-        <!--            <artifactId>loki-logback-appender</artifactId>-->
-        <!--            <version>${loki4j.version}</version>-->
+        <!--            <groupId>io.micrometer</groupId>-->
+        <!--            <artifactId>micrometer-registry-prometheus</artifactId>-->
         <!--        </dependency>-->
-        <!--Documentation generation for ObservationDocumentation classes // 4-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <type>jar</type>
+        </dependency>
+
+
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-docs-generator</artifactId>
@@ -82,11 +107,6 @@
             <artifactId>jakarta.validation-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
@@ -101,7 +121,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
+            <scope>test</scope>
             <optional>true</optional>
         </dependency>
         <dependency>

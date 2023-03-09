@@ -1,13 +1,11 @@
 package com.infinity.employee.controller;
 
+import com.infinity.employee.client.RestTemplateClient;
+import com.infinity.employee.model.Department;
 import com.infinity.employee.model.Employee;
 import com.infinity.employee.service.EmployeeService;
-import com.infinity.employee.utils.Gender;
 import com.infinity.employee.utils.UserContextHolder;
-import io.github.resilience4j.bulkhead.annotation.Bulkhead;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -19,25 +17,21 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-@RestController
 //@RequestMapping("/api/v1/employee")
 //@RequestMapping("/employee")
+@RestController
+@RequiredArgsConstructor
 @Slf4j
 public class EmployeeController {
 
     // get LOGGER from SLF4J annotation
     private static final Logger LOGGER = log;
     private final EmployeeService employeeService;
-
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
+    private final RestTemplateClient restTemplateClient;
 
     /**
      * Returns all employees in the database.
@@ -68,8 +62,10 @@ public class EmployeeController {
     @GetMapping(value = "/department/{departmentId}")
     public ResponseEntity<List<Employee>> getAllEmployeesByDepartment(@PathVariable("departmentId") Long departmentId) {
         LOGGER.info("get all employees in the department with id:{}",departmentId);
+        Department department = restTemplateClient.getDepartment(departmentId);
         List<Employee> employeeList = employeeService.getAllEmployeesByDepartmentId(departmentId);
         employeeList.forEach(employee -> {
+            employee.setDepartmentName(department.getName());
             employee.add(linkTo(methodOn(EmployeeController.class)
                     .deleteEmployee(employee.getEmployeeId()))
                     .withRel("deleteEmployee")

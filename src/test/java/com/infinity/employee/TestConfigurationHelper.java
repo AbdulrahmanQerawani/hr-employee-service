@@ -1,4 +1,4 @@
-package com.infinity.employee.utils;
+package com.infinity.employee;
 
 import java.lang.annotation.*;
 
@@ -6,5 +6,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface TestConfigurationHelper {
+     String value() default "jdbc:postgresql://database:5432/public?slide=disable";
 
 }

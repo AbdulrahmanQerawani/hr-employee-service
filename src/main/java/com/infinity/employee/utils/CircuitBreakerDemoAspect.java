@@ -1,6 +1,5 @@
 package com.infinity.employee.utils;
 
-import jakarta.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

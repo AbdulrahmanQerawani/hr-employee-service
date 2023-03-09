@@ -4,14 +4,13 @@ spring:
   profiles:
     active: dev
   config:
-    import: optional:configserver:http://configserver:8071
+    import: configserver:http://configserver:8071
 
 logging:
   level:
     com.netflix: WARN
     org.springframework.web: WARN
     com.infinity: DEBUG
-
 
 
 

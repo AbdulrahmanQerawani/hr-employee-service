@@ -2,11 +2,7 @@ package com.infinity.employee;
 
 
 import com.infinity.employee.utils.Gender;
-import lombok.Setter;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.Assert;
 import com.infinity.employee.model.Employee;
 import com.infinity.employee.repository.EmployeeRepository;
