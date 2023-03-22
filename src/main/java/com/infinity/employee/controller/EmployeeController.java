@@ -40,8 +40,6 @@ public class EmployeeController {
      */
     @GetMapping(value = "/")
     public ResponseEntity<List<Employee>> getAllEmployees() throws TimeoutException {
-        LOGGER.debug("EmployeeServiceController Correlation id: {}",
-                UserContextHolder.getContext().getCorrelationId());
         List<Employee> employeeList = employeeService.getAllEmployees();
         employeeList.forEach(employee -> {
             employee.add(linkTo(methodOn(EmployeeController.class)
@@ -50,7 +48,6 @@ public class EmployeeController {
                     .withSelfRel());
         });
         return ResponseEntity.ok(employeeList);
-
     }
     /**
      * Returns all employees with specified department.
@@ -103,8 +100,8 @@ public class EmployeeController {
      */
     @GetMapping(value = "/api/v2/organization/{organizationId}")
     public List<Employee> findByOrganization(@PathVariable("organizationId") Long organizationId){
-        LOGGER.info("get all employees with specified organization id:{} request->[/api/v2/organization/{}]",organizationId,organizationId);
-        return employeeService.getAllEmployeesByOrganizationId(organizationId);
+        List<Employee> employeeList = employeeService.getAllEmployeesByOrganizationId(organizationId);
+        return employeeList;
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.infinity.employee;
 
 
-import com.infinity.employee.utils.Gender;
+import com.infinity.employee.common.Gender;
 import org.junit.jupiter.api.*;
 import org.springframework.util.Assert;
 import com.infinity.employee.model.Employee;

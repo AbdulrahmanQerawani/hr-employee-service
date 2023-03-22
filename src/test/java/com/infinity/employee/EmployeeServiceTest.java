@@ -3,7 +3,7 @@ package com.infinity.employee;
 import com.infinity.employee.model.Employee;
 import com.infinity.employee.repository.EmployeeRepository;
 import com.infinity.employee.service.EmployeeService;
-import com.infinity.employee.utils.Gender;
+import com.infinity.employee.common.Gender;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

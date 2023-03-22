@@ -2,8 +2,7 @@ package com.infinity.employee.service;
 
 import com.infinity.employee.model.Employee;
 import com.infinity.employee.repository.EmployeeRepository;
-import com.infinity.employee.utils.Gender;
-import com.infinity.employee.utils.UserContextHolder;
+import com.infinity.employee.common.Gender;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +44,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Retry(name = "retryEmployeeservice",fallbackMethod = "fallBack")
     @RateLimiter(name = "employeeservice",fallbackMethod = "fallBack")
     public List<Employee> getAllEmployees() {
-        LOGGER.debug("EmployeeServiceImpl:getAllEmployee Correlation id: {}",
-                UserContextHolder.getContext().getCorrelationId());
         randomlyRunLong();
         return employeeRepository.findAll();
     }

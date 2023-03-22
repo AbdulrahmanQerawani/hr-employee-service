@@ -43,6 +43,11 @@
             <artifactId>opentelemetry-exporter-zipkin</artifactId>
         </dependency>
         <dependency>
+            <groupId>net.ttddyy.observation</groupId>
+            <artifactId>datasource-micrometer</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>7.3</version>
@@ -78,8 +83,6 @@
             <artifactId>jedis</artifactId>
             <type>jar</type>
         </dependency>
-
-
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-docs-generator</artifactId>

@@ -1,7 +1,7 @@
 package com.infinity.employee.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.infinity.employee.utils.Gender;
+import com.infinity.employee.common.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;

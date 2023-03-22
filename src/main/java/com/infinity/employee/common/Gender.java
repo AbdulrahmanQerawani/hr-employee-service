@@ -1,4 +1,4 @@
-package com.infinity.employee.utils;
+package com.infinity.employee.common;
 
 public enum Gender {
     MALE,

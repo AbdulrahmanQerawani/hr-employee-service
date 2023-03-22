@@ -5,6 +5,7 @@ import com.infinity.employee.model.Organization;
 import com.infinity.employee.repository.DepartmentRedisRepository;
 import com.infinity.employee.repository.OrganizationRedisRepository;
 import com.infinity.employee.utils.UserContextHolder;
+import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Observed(name = "read Data from Redis")
 public class RestTemplateClient {
     private static final Logger LOGGER = log;
     private final GatewayClientService gatewayClientService;

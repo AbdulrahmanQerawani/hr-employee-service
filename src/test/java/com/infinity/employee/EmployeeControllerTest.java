@@ -3,7 +3,7 @@ package com.infinity.employee;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infinity.employee.model.Employee;
 import com.infinity.employee.service.EmployeeService;
-import com.infinity.employee.utils.Gender;
+import com.infinity.employee.common.Gender;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import org.junit.jupiter.api.*;
